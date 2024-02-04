@@ -48,15 +48,15 @@ flutter:
   assets:
     - images/
 ```
-```
 以我的文件夹举例：在
-/d/code/FLUTTERCODE/fle/android/app/src/main/res/mipmap-xhdpi 等
-这几个文件夹 由于装程序的 logo图标
+> /d/code/FLUTTERCODE/fle/android/app/src/main/res/mipmap-xhdpi 等
+这几个文件夹 由于装程序的 `logo图标` 
+> 安装程序时 在桌面的那个logo
 
-/d/code/FLUTTERCODE/fle/build/app/outputs/apk/debug
-/d/code/FLUTTERCODE/fle/build/app/outputs/flutter-apk
+> /d/code/FLUTTERCODE/fle/build/app/outputs/apk/debug
+> /d/code/FLUTTERCODE/fle/build/app/outputs/flutter-apk
 当程序稀里糊涂跑坏了，在文件夹里删 apk 文件
 
-/d/code/FLUTTERCODE/fle/android/app/src/main/AndroidManifest.xml
-这个文件的 第四排 是这样的形式：android:label="记账本X"
+> /d/code/FLUTTERCODE/fle/android/app/src/main/AndroidManifest.xml
+这个文件的 第四排 是这样的形式：`android:label="记账本X"`
 可以修改软件在桌面的名字
