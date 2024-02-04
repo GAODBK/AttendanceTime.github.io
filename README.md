@@ -52,11 +52,10 @@ flutter:
 > /d/code/FLUTTERCODE/fle/android/app/src/main/res/mipmap-xhdpi 等
 
 这几个文件夹 由于装程序的 `logo图标` 
-
-> 安装程序时 在桌面的那个logo
+安装程序时 在桌面的那个logo
 
 > /d/code/FLUTTERCODE/fle/build/app/outputs/apk/debug
-> /d/code/FLUTTERCODE/fle/build/app/outputs/flutter-apk
+<br> /d/code/FLUTTERCODE/fle/build/app/outputs/flutter-apk
 
 当程序稀里糊涂跑坏了，在文件夹里删 apk 文件
 
