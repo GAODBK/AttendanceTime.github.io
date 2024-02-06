@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'index_page.dart';
+import 'package:video_player/video_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,6 +11,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late VideoPlayerController _controller;
   bool misFirst = false;
 
   void readCacheData() async {
@@ -27,11 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const VideoApp())
-      );//VideoApp HomePage
-    });
+    _controller = VideoPlayerController.networkUrl(Uri.parse(
+// 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+'https://cdnl.iconscout.com/lottie/premium/thumb/financial-statement-5403831-4510589.mp4'
+    ))..initialize().then((_) { setState(() {}); });
+    /*_controller = VideoPlayerController.file(
+      File('assets/Bookkeeping.mp4')
+    )..initialize().then((_) { setState(() {}); });*/
   }
 
   @override
@@ -46,37 +49,34 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomLeft
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:<Widget>[
-            Lottie.asset('assets/Bookkeeping.mp4'),
-            const Text("Book keeping", style: TextStyle(
-              fontStyle: FontStyle.italic, color: Colors.white,
-              fontSize: 30)
-            ),
-          ]
+        child: Scaffold(
+          body: Center(
+            child: _controller.value.isInitialized ? AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            ) : Container(),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () { setState(() {
+              _controller.setPlaybackSpeed(_controller.value.isPlaying ?  0.0 : 4.0);
+              _controller.value.isPlaying
+              ? _controller.pause() : _controller.play();
+            }); },
+            child: const Icon(Icons.play_arrow
+// _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            )
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          backgroundColor: Colors.lightGreen[200]!,
+          //)//Color(!),
         )
       )
     );
   }
 
-  buildCountdownProgress() {
-    if (misFirst) {
-      return Positioned( left: 0, right: 0,
-        child: Row(mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ClipOval(child: Image.asset(
-             "images/3.jpg", width: 33, height: 33, fit: BoxFit.cover
-            )),
-            const Text(" Welcome bookkeeping book", style: TextStyle(
-              fontStyle: FontStyle.italic, color: Colors.white,
-              fontSize: 26)
-            )
-          ]
-        )
-      );
-    }else{
-      return Container();
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

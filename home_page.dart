@@ -1,6 +1,7 @@
 import 'package:LYG_JZB/expanse_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'expense_data.dart';
 import 'expense_item.dart';
@@ -20,10 +21,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.transparent, // 状态栏颜色
-      statusBarIconBrightness: Brightness.dark, // 状态栏图标颜色
-    ));
     Provider.of<ExpenseDate>(context, listen: false).prepareData();
   }
 
@@ -79,10 +76,27 @@ class _HomePageState extends State<HomePage> {
         .addNewExpense(newExpense);
 
       Navigator.pop(context);
+
+      showDoneDialog();
     }else{
       return;
     }
   }
+
+  void showDoneDialog() => showDialog(
+      barrierDismissible: false, context: context,
+      builder: (context) => Dialog(child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset('assets/OK.json',repeat: false,width: 170),
+          FilledButton(
+              onPressed: ()=>Navigator.pop(context),
+              child: const Text("完成")
+          ),
+          const SizedBox(height: 15)
+        ],
+      ))
+  );
 
   void cancel() {
     Navigator.pop(context);
