@@ -1,7 +1,7 @@
-import 'package:LYG_JZB/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'index_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,15 +10,15 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
+class _SplashScreenState extends State<SplashScreen> {
   bool misFirst = false;
 
-  void readCacheData() async{
+  void readCacheData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isFirst = prefs.getBool("flutter_x_is_first");
-    if(isFirst == null || isFirst == false){
+    if (isFirst == null || isFirst == false) {
       prefs.setBool("flutter_x_is_first", true);
-    }else{
+    } else {
       prefs.setBool("flutter_x_is_first", false);
     }
     misFirst = isFirst!;
@@ -27,18 +27,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(const Duration(seconds: 2),(){
+    Future.delayed(const Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomePage()));
+          MaterialPageRoute(builder: (_) => const VideoApp())
+      );//VideoApp HomePage
     });
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    super.dispose();
   }
 
   @override
@@ -55,10 +48,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.edit, color: Colors.white, size: 120),
-            buildCountdownProgress(),
-            theCoverLogo()
+          children:<Widget>[
+            Lottie.asset('assets/Bookkeeping.mp4'),
+            const Text("Book keeping", style: TextStyle(
+              fontStyle: FontStyle.italic, color: Colors.white,
+              fontSize: 30)
+            ),
           ]
         )
       )
@@ -66,29 +61,22 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   buildCountdownProgress() {
-    if(misFirst){
-      return Positioned(left: 0,right: 0,
-        child: Row( mainAxisAlignment: MainAxisAlignment.center,
+    if (misFirst) {
+      return Positioned( left: 0, right: 0,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ClipOval(child:Image.asset(
-              "images/3.jpg", width: 33,height: 33,fit: BoxFit.cover
+            ClipOval(child: Image.asset(
+             "images/3.jpg", width: 33, height: 33, fit: BoxFit.cover
             )),
-            const Text(" 欢迎进入 LYG 的记账本", style: TextStyle(
-                fontSize: 15, color: Colors.white))
+            const Text(" Welcome bookkeeping book", style: TextStyle(
+              fontStyle: FontStyle.italic, color: Colors.white,
+              fontSize: 26)
+            )
           ]
         )
       );
-    } else {
-      return Container();
-    }
-  }
-
-  theCoverLogo() {
-    if(misFirst){
-      return Container();
     }else{
-      return const Text("Book keeping", style: TextStyle(
-        fontStyle: FontStyle.italic, color: Colors.white, fontSize: 30));
+      return Container();
     }
   }
 }

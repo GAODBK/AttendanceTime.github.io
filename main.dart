@@ -1,4 +1,5 @@
 import 'package:LYG_JZB/expense_data.dart';
+import 'package:LYG_JZB/index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       create: (context)=>ExpenseDate(),
       builder: (context,child)=>const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: VideoApp()//SplashScreen(),
       )
     );
   }

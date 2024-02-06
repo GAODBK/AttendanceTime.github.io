@@ -1,77 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
-class IndexPage extends StatefulWidget{
-  const IndexPage({super.key});
+import 'home_page.dart';
 
+class VideoApp extends StatefulWidget {
+  const VideoApp({super.key});
   @override
-  State<StatefulWidget> createState() {
-    return IndexPageState();
-  }
+  _VideoAppState createState() => _VideoAppState();
 }
 
-class IndexPageState extends State<IndexPage> {
-  bool misFirst = false;
+class _VideoAppState extends State<VideoApp>
+  with SingleTickerProviderStateMixin {
+
+  void onONEPressed() => Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (_) => const HomePage())
+  );
 
   @override
   void initState() {
     super.initState();
-    readCacheData();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent, // 状态栏颜色
+        statusBarIconBrightness: Brightness.dark, // 状态栏图标颜色
+      )
+    );
   }
 
-  void readCacheData() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? isFirst = prefs.getBool("flutter_x_is_first");
-    if(isFirst == null || isFirst == false){
-      prefs.setBool("flutter_x_is_first", true);
-    }else{
-      prefs.setBool("flutter_x_is_first", false);
-    }
-    misFirst = isFirst!;setState(() {});
-    // print("读取数据 $isFirst");
-  }
+  //VideoApp HomePage
+
+  void showDoneDialog() => showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => Dialog(child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Lottie.asset('assets/NB_lottie.json',repeat: false),
+        FilledButton(
+          onPressed: ()=>Navigator.pop(context),
+          child: const Text("完成")
+        ),
+        const SizedBox(height: 15)
+      ],
+    ))
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Stack(children: <Widget>[
-      buildAWelcomePageBackground(),
-      buildCountdownProgressBar(),
-      Positioned(bottom: 40,left: 0,right: 0,
-        child: Row( mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ClipOval(child:Image.asset(
-              "images/3.jpg", width: 33,height: 33,fit: BoxFit.cover
-            )),
-            const SizedBox(width: 14),
-            const Text("欢迎进入 LYG 的记账本")
-          ]
+  Widget build(BuildContext context)=>Scaffold(
+    body: Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue, Colors.green],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft
         )
       ),
-    ]));
-  }
-
-  buildAWelcomePageBackground() {
-    if(misFirst){
-      return Container();
-    } else {
-      return Image.asset("images/3.jpg");
-    }
-  }
-
-  buildCountdownProgressBar() {
-    if(misFirst){
-      return Positioned(child: Center(
-        child: SizedBox(
-          child: Stack(children: const <Widget>[
-            Center(child: CircularProgressIndicator()),
-            Center(child: Padding(padding: EdgeInsets.only(top: 70.0),
-              child: Text("Loading...",style: TextStyle(fontSize: 20)
-            )))
-          ])
-        )
-      ));
-    }else {
-      return Container();
-    }
-  }
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/NB_lottie.json'),
+          const SizedBox(height: 120),
+          MaterialButton(
+            onPressed: onONEPressed,//showDoneDialog
+            child: Row( mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget> [
+                ClipOval(child: Image.asset(
+                  "assets/3.jpg", width: 33, height: 33, fit: BoxFit.cover
+                )),
+                const Text(" Let's go",style: TextStyle(
+                  fontStyle: FontStyle.italic,fontSize: 27
+                )),
+                const Icon(Icons.chevron_right_rounded, size: 30)
+              ]
+            )
+          )
+        ]
+      )
+    )
+  );
 }

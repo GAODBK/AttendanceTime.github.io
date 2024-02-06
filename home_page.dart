@@ -1,5 +1,6 @@
 import 'package:LYG_JZB/expanse_summary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'expense_data.dart';
 import 'expense_item.dart';
@@ -19,6 +20,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.transparent, // 状态栏颜色
+      statusBarIconBrightness: Brightness.dark, // 状态栏图标颜色
+    ));
     Provider.of<ExpenseDate>(context, listen: false).prepareData();
   }
 
