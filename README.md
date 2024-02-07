@@ -13,7 +13,8 @@ plagiarism Flutter project.
 
 有关Flutter开发入门的帮助，请查看
 [在线文档](https:// docs.flutter.Dev/)，提供教程，
-示例、移动开发指南和完整的API参考。
+比如 我第一次学明白的官方示例`[showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html)`
+移动开发指南和完整的API参考
 
 ```dart
 name: LYG_JZB
@@ -36,6 +37,9 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   shared_preferences: ^2.2.2
+  video_player: ^2.7.2
+  lottie: ^2.3.2
+  dio: ^5.4.0
   #  flutter_playout: ^2.0.1
 
 dev_dependencies:
@@ -46,7 +50,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - images/
+    - assets/
 ```
 以我的文件夹举例：在
 > /d/code/FLUTTERCODE/fle/android/app/src/main/res/mipmap-xhdpi 等
