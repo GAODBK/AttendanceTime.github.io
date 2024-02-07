@@ -31,17 +31,24 @@ class _VideoAppState extends State<VideoApp>
           const SizedBox(height: 120),
           MaterialButton(
             onPressed: onONEPressed,//showDoneDialog
-            child: Row( mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget> [
-                ClipOval(child: Image.asset(
-                  "assets/3.jpg", width: 33, height: 33, fit: BoxFit.cover
-                )),
-                const Text(" Let's go",style: TextStyle(
-                  fontStyle: FontStyle.italic,fontSize: 27
-                )),
-                const Icon(Icons.chevron_right_outlined, size: 30)
-              ]
-            ),
+              child:Container(
+              decoration: const ShapeDecoration(
+                shape: CircleBorder(),
+                color: Colors.transparent,
+              ),
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget> [
+                  ClipOval(child: Image.asset(
+                   "assets/3.jpg", width: 33, height: 33, fit: BoxFit.cover
+                  )),
+                  const Text(" Let's go",style: TextStyle(
+                    fontStyle: FontStyle.italic,fontSize: 27
+                  )),
+                  const Icon(Icons.chevron_right_outlined, size: 30)
+                ],
+              )
+            )
           ),
         ]
       ),
