@@ -66,36 +66,36 @@ class _HomePageState extends State<HomePage> {
   void save() {
     if(newExpenseNameController.text.isNotEmpty
         && newExpenseAmountController.text.isNotEmpty){
+      Navigator.pop(context);
+      showDoneDialog();
       ExpenseItem newExpense = ExpenseItem(
         name: newExpenseNameController.text,
         amount: newExpenseAmountController.text,
         dateTime: DateTime.now(),
       );
-
       Provider.of<ExpenseDate>(context, listen: false)
         .addNewExpense(newExpense);
-
-      Navigator.pop(context);
-
-      showDoneDialog();
     }else{
       return;
     }
   }
 
-  void showDoneDialog() => showDialog(
-      barrierDismissible: false, context: context,
-      builder: (context) => Dialog(child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Lottie.asset('assets/OK.json',repeat: false,width: 170),
-          FilledButton(
-              onPressed: ()=>Navigator.pop(context),
-              child: const Text("完成")
-          ),
-          const SizedBox(height: 15)
-        ],
-      ))
+  void showDoneDialog() => showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+    ),
+    builder: (BuildContext context)=>Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Lottie.asset('assets/OK.json',width: 200),
+        FilledButton(
+          onPressed: ()=>{Navigator.pop(context)},
+          child: const Text("完成")
+        )
+      ]
+    )
   );
 
   void cancel() {
