@@ -1,4 +1,5 @@
-import 'package:LYG_JZB/hive_database.dart';
+import 'package:LYG_JZB/bookkeeping/hive_database.dart';
+import 'package:LYG_JZB/bookkeeping/home_page.dart';
 import 'package:flutter/material.dart';
 import 'date_time_helper.dart';
 import 'expense_item.dart';
@@ -23,9 +24,15 @@ class ExpenseDate extends ChangeNotifier {
     notifyListeners();
     db.saveData(overallExpenseList);
   }
-
   void deleteExpense(ExpenseItem expense) {
     overallExpenseList.remove(expense);
+
+    notifyListeners();
+    db.saveData(overallExpenseList);
+  }
+
+  void setExpense(ExpenseItem expense) {
+    //print("delete: ${expense.name}, ${expense.amount}, ${expense.dateTime}");
 
     notifyListeners();
     db.saveData(overallExpenseList);
@@ -58,6 +65,7 @@ class ExpenseDate extends ChangeNotifier {
   }
 
   Map<String, double> calculateDailyExpenseSummary() {
+                        // 每日费用汇总表
     Map<String, double> dailyExpenseSummary = {};
 
     for (var expense in overallExpenseList) {

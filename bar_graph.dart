@@ -38,10 +38,9 @@ class MyBarGraph extends StatelessWidget {
       satAmount: satAmount,
     );
 
-    myBarData.initialze_BarData();
+    myBarData.initialColumnData();
 
     return BarChart(BarChartData(
-      maxY: maxY, minY: 10,
       titlesData: FlTitlesData(
         show: true,
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -50,23 +49,23 @@ class MyBarGraph extends StatelessWidget {
         bottomTitles: AxisTitles(sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: getBottomTitles,
-          reservedSize: 30//给定轴（例如底部轴或侧边轴）预留的空间大小
+          reservedSize: 28//给定轴（例如底部轴或侧边轴）预留的空间大小
         )),
       ),
       gridData: FlGridData(show: false),
       borderData: FlBorderData(show: false),
       barGroups: myBarData.barData.map(
         (data) => BarChartGroupData(
-          x: data.x, barRods: [
-            BarChartRodData(
-              toY: data.y,
-              color: Colors.greenAccent[400]!,width: 27,
-              borderRadius: BorderRadius.circular(3),
-              backDrawRodData: BackgroundBarChartRodData(
-                show: true, toY: maxY, color: Colors.grey[200]!,
-              ),
+          x: data.x,
+          barRods: [ BarChartRodData(
+            toY: data.y,
+            color: Colors.green[400]!,
+            width: 27,
+            borderRadius: BorderRadius.circular(3),
+            backDrawRodData: BackgroundBarChartRodData(
+              show: true, toY: maxY, color: Colors.grey[200]!,
             )
-          ],
+          )]
         ),
       ).toList(),
     ));

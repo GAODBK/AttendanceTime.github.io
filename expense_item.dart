@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 class ExpenseItem {
-  final String name;
-  final String amount;
+  /*final String name;
+  final String amount;*/
+  String name;
+  String amount;
   final DateTime dateTime;
 
   ExpenseItem({

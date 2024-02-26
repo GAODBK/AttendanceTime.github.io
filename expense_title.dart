@@ -57,13 +57,6 @@ class ExpenseTitle extends StatelessWidget {
             )
           )
         )
-        /*这里只替换上方的Padding，用于更换程序的 数据框
-        child: Card( elevation: 4,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(5.0),
-            ),*/
       )
     );
   }

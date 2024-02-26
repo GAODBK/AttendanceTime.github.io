@@ -1,4 +1,4 @@
-import 'package:LYG_JZB/individual_bar.dart';
+import 'package:LYG_JZB/bookkeeping/individual_bar.dart';
 
 class BarData {
   final double sunAmount;
@@ -21,7 +21,7 @@ class BarData {
 
   List<IndividualBar> barData = [];
 
-  void initialze_BarData() {
+  void initialColumnData() {
     barData = [
       IndividualBar(x: 0, y: sunAmount),
       IndividualBar(x: 1, y: monAmount),
