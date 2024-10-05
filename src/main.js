@@ -1,9 +1,12 @@
 import 'element-plus/dist/index.css'
+import './index.css'
+import './css/budget.css'
+import './css/Homepage.css'
+
 
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './index.js'
-import './index.css'
 import ElementPlus from 'element-plus'
 
 const app = createApp(App)
