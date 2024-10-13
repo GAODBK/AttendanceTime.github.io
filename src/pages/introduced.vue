@@ -13,7 +13,7 @@
       <span>fresh and organic</span>
       <h3>your daily need products</h3>
       <router-link class="btn"
-                   to="/Homepage/WaterfallChart">
+                   to="/data">
         开始使用
       </router-link>
     </div>
