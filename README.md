@@ -1,3 +1,6 @@
+这个项目 文件夹原名：asp_xmsx，如果报错，请先重命名文件夹
+The original name of this project folder is: asp_xmsx. If an error is reported, please rename the folder first.
+
 ```sql
 CREATE TABLE tb_College
 (
