@@ -1,38 +1,20 @@
-# vue-project2
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+# vue-project2 Setup
 
 ```sh
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
 
-### Compile and Minify for Production
-
-```sh
 npm run build
-```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
 npm run lint
 ```
+
+
+1. 页面文件放在 `views` 文件下,且命名方式为`文件夹/index.vue`
+2. 组件写在`components`目录下,命名统一采用大驼峰格式
+3. 不含有响应式 api 的工具函数写在`utils`文件下,命名方式为小驼峰。含有响应式 api 的工具则称之为`hook`函数,写在`hooks`文件夹下,命名方式为`use-xxx/index.ts`,导出函数名为`useXxx`
+4. 请求接口统一写在`src/api`目录下,且根据使用场景区分目录
 
 
 ```js
@@ -47,7 +29,6 @@ https://jsd.cdn.zzko.cn/gh/leegical/Blog_img/md_img202305061640828.png
 # 国外请求将访问到
 https://cdn.jsdelivr.net/gh/leegical/Blog_img/md_img202305061640828.png
 ```
-
 
 
 ```js
@@ -78,7 +59,7 @@ boxes.forEach((box) => {
 ```
 
 ```css
-'* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -114,12 +95,11 @@ body {
 }
 .box.hovered {
   border: 2px dashed #333;
-}'
-
+}
 ```
 
 ```html
-'<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -139,6 +119,5 @@ body {
       <div class="box"></div>
     </section>
   </body>
-</html>'
-
+</html>
 ```

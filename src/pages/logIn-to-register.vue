@@ -1,34 +1,32 @@
 <script setup>
-import {useRouter} from 'vue-router';
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const goToPage = () => router.push('/Homepage');
+const router = useRouter()
+const goToPage = () => router.push('/Homepage')
 </script>
 
 <template>
   <div class="body">
     <div class="switch">
-      <h2>
-        没有/已有账号？
-      </h2>
+      <h2>没有/已有账号？</h2>
     </div>
-    <input type="checkbox" style="display: none" id="change"/>
+    <input type="checkbox" style="display: none" id="change" />
     <label for="change">切 换</label>
 
     <div class="turn">
       <div class="over">
         <form action="" class="login" @submit.prevent="goToPage">
-          <h1>欢迎回来</h1>
-          <input type="text" placeholder="用户名"/>
-          <input type="password" placeholder="密码"/>
-          <input type="submit" class="btn" value="登 录"/>
+          <h1 class="text-3xl font-bold underline">欢迎回来</h1>
+          <input type="text" placeholder="用户名" />
+          <input type="password" placeholder="密码" />
+          <input type="submit" class="btn" value="登 录" />
         </form>
         <form action="" class="sign">
           <h1>加入我们</h1>
-          <input type="text" placeholder="用户名"/>
-          <input type="password" placeholder="密码"/>
-          <input type="password" placeholder="确认密码"/>
-          <input type="submit" class="btn" value="注 册"/>
+          <input type="text" placeholder="用户名" />
+          <input type="password" placeholder="密码" />
+          <input type="password" placeholder="确认密码" />
+          <input type="submit" class="btn" value="注 册" />
         </form>
       </div>
     </div>
