@@ -1,0 +1,69 @@
+:root {
+  --dialogHeight: 760px;
+  --dialogwidth: 1200px;
+}
+
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* 居中灰色大盒子，分出左右盒子  */
+/* .mask .PopUpBox {
+    position: absolute;
+    display: flex;
+    background: #f4f4f4;
+    top: calc(50vh - var(--dialogHeight) / 2);
+    left: calc(45vw - var(--dialogwidth) / 2);
+    min-width: calc(var(--dialogwidth) + 10vw);
+    min-height: calc(var(--dialogHeight));
+    border-radius: 10px;
+  }
+  
+  .mask .PopUpBox .left{
+    width: 65%;
+    display: grid;
+    place-items: center;
+  }
+  
+  .mask .PopUpBox .left img{
+    width: 100%;
+    border-radius: 20px;
+  }*/
+
+/* 居中灰色大盒子，居中图片 */
+/* .mask .PopUpBox {
+    position: absolute;
+    top: calc(50vh - var(--dialogHeight) / 2);
+    left: calc(45vw - var(--dialogwidth) / 2);
+    width: calc(var(--dialogwidth) + 10vw);
+    height: calc(var(--dialogHeight));
+    background: #f4f4f4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+  }
+  
+  .mask .PopUpBox img {
+    height: var(--dialogHeight);
+    max-width: calc(var(--dialogwidth) + 10vw);
+  }
+   */
+
+/* 盒子初始定位 */
+.mask .PopUpBox {
+  position: absolute;
+  transform-origin: 0 0;
+  /* top: -100px; */
+  /* left: 100px; */
+}
+
+.mask .PopUpBox .left {
+  display: grid;
+  place-items: center;
+}
