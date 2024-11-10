@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>预算应用程序</title>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="sub-container">
+
+
+          <div class="total-amount-container">
+            <h3>预算</h3>
+            <p class="error" id="budget-error">值不能为空或负数</p>
+            <input
+              type="number"
+              class="x-input"
+              id="total-amount"
+              placeholder="输入总金额"
+            />
+            <button class="submit" id="total-amount-button">设置预算</button>
+          </div>
+
+
+          <div class="upload-container">
+            <div class="header-section">
+              <h1>上传文件</h1>
+              <p>上传要与团队成员共享的文件.</p>
+              <p>允许使用PDF、图片和视频.</p>
+            </div>
+            <div class="drop-section">
+              <div class="col">
+                <div class="cloud-icon">
+                  <img src="icons/cloud.png" alt="cloud" />
+                </div>
+                <span>将您的文件拖放到此处</span>
+                <span>或</span>
+                <button class="file-selector">浏览文件</button>
+                <input type="file" class="file-selector-input" multiple />
+              </div>
+              <div class="col">
+                <div class="drop-here">拖放到此处</div>
+              </div>
+            </div>
+            <div class="list-section">
+              <div class="list-title">上传的文件</div>
+              <div class="list"></div>
+            </div>
+          </div>
+
+          
+          <div class="user-amount-container">
+            <h3>开支</h3>
+            <p class="error" id="product-title-error">值不能为空</p>
+            <input
+              type="text"
+              class="product-title x-input"
+              id="product-title"
+              placeholder="输入开销名称"
+            />
+            <input
+              type="number"
+              class="x-input"
+              id="user-amount"
+              placeholder="输入开销金额"
+            />
+            <button class="submit" id="check-amount">支出金额</button>
+          </div>
+        </div>
+
+        <div class="output-container flex-space">
+          <div>
+            <p>总预算</p>
+            <span id="amount">347345</span>
+          </div>
+          <div>
+            <p>费用</p>
+            <span id="expenditure-value">456</span>
+          </div>
+          <div>
+            <p>余额</p>
+            <span id="balance-amount">346889</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="list">
+        <h3>费用清单</h3>
+        <div class="list-container" id="list">
+          <div class="sublist-content flex-space">
+            <p class="product">现场打分</p>
+            <p class="amount">456</p>
+            <button
+              class="fa-solid fa-pen-to-square edit"
+              style="font-size: 1.2em"
+            ></button
+            ><button
+              class="fa-solid fa-trash-can delete"
+              style="font-size: 1.2em"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

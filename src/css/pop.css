@@ -1,6 +1,6 @@
 :root {
   --dialogHeight: 760px;
-  --dialogwidth: 1000px;
+  --dialogwidth: 1200px;
 }
 
 .mask {
@@ -37,12 +37,12 @@
 }*/
 
 /* 居中灰色大盒子，居中图片 */
-.mask .PopUpBox {
+/* .mask .PopUpBox {
   position: absolute;
   top: calc(50vh - var(--dialogHeight) / 2);
   left: calc(45vw - var(--dialogwidth) / 2);
-  min-width: calc(var(--dialogwidth) + 10vw);
-  min-height: calc(var(--dialogHeight));
+  width: calc(var(--dialogwidth) + 10vw);
+  height: calc(var(--dialogHeight));
   background: #f4f4f4;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  
   border-radius: 10px;
@@ -51,16 +51,21 @@
 }
 
 .mask .PopUpBox img {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  max-height: var(--dialogHeight);
-  max-width: var(--dialogwidth);
+  height: var(--dialogHeight);
+  max-width: calc(var(--dialogwidth) + 10vw);
 }
-
+ */
 
 /* 盒子初始定位 */
-/* .mask .PopUpBox {
+.mask .PopUpBox {
   position: absolute;
-  top: -100px;
-  left: 100px;
-} */
+  transform-origin: 0 0;
+  background: black;
+  /* top: -100px; */
+  /* left: 100px; */
+}
+
+.mask .PopUpBox .left{
+  display: grid;
+  place-items: center;
+}

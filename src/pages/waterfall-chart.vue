@@ -1,11 +1,10 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import imgbox from '../components/ImgBox.vue'
 import pop from '../components/pop.vue'
-import ImageGallery from '@/components/ImageGallery.vue'
 
-const showPictures = reactive({})
+const showPictures = ref(null)
 
 const fdghdgfhsd = ref([])
 
@@ -20,7 +19,7 @@ const sendData = () => {
 const fetchData = async () => {
   try {
     const response = await axios.get(
-      'https://api.github.com/repos/GAODBK/lyg-photo-warehouse/contents'
+      'https://api.github.com/repos/GAODBK/lyg-photo-warehouse/contents/pubu'
     )
 
     response.data
@@ -31,9 +30,22 @@ const fetchData = async () => {
           url: a.download_url
         })
       )
+      // convertUrl()
     console.log(
       `${Math.floor(response.data.reduce((acc, file) => acc + file.size / 1024, 0) / 1024)}MB`
     )
+
+    console.log(
+      response.data.filter( 
+        a => a.type === "dir"
+      ).map(
+        console.log(a.name)
+  
+      )
+    );
+      
+      // `${response.data.reduce((acc, file) => acc + file.size, 0) / 1000000}MB`
+    
   } catch (error) {
     console.error('获取数据时出错:', error) // 错误处理
   }
@@ -66,31 +78,23 @@ onMounted(() => {
 
 const setDialogAnimation = (e) => {
   if (e.target.tagName === 'IMG') {
-    /*
-    const rect = e.target.getBoundingClientRect()
-    console.log(rect.left, rect.top, rect.width, rect.height)
-    377.6000061035156 
-    168.77500915527344 
-    345.20001220703125 
-    206.9499969482422
-    showPictures.value.imgLeft = rect.left
-    showPictures.value.imgTop = rect.top
-    showPictures.value.imgWidth = rect.width
-    showPictures.value.imgHeight = rect.height
-    showPictures.value.imgUrl = e.target.src */
+    showPictures.value = e.target
   }
+}
+
+const CloseEvent = () => {
+  showPictures.value = null;
 }
 </script>
 
 <template>
-  <ImageGallery />
-
   <div class="columnBox">
     <div v-for="(item, index) in fdghdgfhsd" :key="index">
       <imgbox :item @click="setDialogAnimation($event)" />
     </div>
   </div>
-  <!-- <pop :showPictures /> -->
+
+  <pop :showPictures v-if="showPictures" @close="CloseEvent()" />
 </template>
 
 <style scoped>

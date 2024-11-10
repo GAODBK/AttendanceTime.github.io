@@ -30,6 +30,21 @@ const router = createRouter({
                     name: 'budget',
                     component: () => import('./pages/budget-page.vue')
                 },
+                {
+                    path: '/Homepage/Calculator',
+                    name: 'Calculator',
+                    component: () => import('./pages/Calculator.vue')
+                },
+                {
+                    path: '/Homepage/DragAndRotate',
+                    name: 'DragAndRotate',
+                    component: () => import('./pages/DragAndRotate.vue')
+                },
+                {
+                    path: '/Homepage/LazyLoading',
+                    name: 'LazyLoading',
+                    component: () => import('./pages/LazyLoading.vue')
+                },
             ]
         },
     ]
