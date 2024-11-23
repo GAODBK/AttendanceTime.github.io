@@ -1,0 +1,592 @@
+– 数据源
+show databases; 查询电脑里 库
+
+查询 某一个库的 表 数量：
+USE testing;
+SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'testing';
+
+查询 某一个库 的 表 名称
+ SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = 'testing';
+
+查询 库 表 的 列 数据
+select * from testing.teacher;
+
+
+– 50题及答案
+
+– 1.查询“某1”课程比“某2”课程成绩高的所有学生的学号；
+SELECT a.sid FROM (SELECT * FROM sc WHERE cid='01')a LEFT JOIN
+(SELECT * FROM SC WHERE cid='02')b ON a.sid=b.sid
+WHERE a.score > b.score
+
+– 2.查询平均成绩大于60分的同学的学号和平均成绩；
+SELECT a.sid,AVG(a.score) 平均分 FROM sc a GROUP BY a.sid HAVING AVG(a.score)>60
+
+– 3.查询所有同学的学号、姓名、选课数、总成绩
+SELECT a.sid,a.sname,IFNULL(b.cid,0) 选课数,IFNULL(b.score,0) 总分 FROM student a LEFT JOIN
+(SELECT sid,COUNT(cid) cid,SUM(score) score FROM sc GROUP BY sid ) b ON a.sid =b.sid
+
+– 4.查询姓“李”的老师的个数；
+SELECT COUNT(1) FROM teacher WHERE tname LIKE '李%';
+
+– 5.查询没学过“张三”老师课的同学的学号、姓名；
+SELECT sid ,sname FROM student WHERE sid NOT IN(
+SELECT b.sid FROM sc b LEFT JOIN course c ON b.cid=c.cid
+LEFT JOIN teacher d ON c.tid=d.tid
+WHERE d.tname='张三')
+– 6.查询学过语文并且也学过数学课程的同学的学号、姓名；
+SELECT c.sid,c.sname FROM student c INNER JOIN
+(SELECT a.sid FROM sc a LEFT JOIN course b ON a.cid =b.cid WHERE b.cname='语文')a
+ON c.sid=a.sid
+INNER JOIN
+(SELECT a.sid FROM sc a LEFT JOIN course b ON a.cid =b.cid WHERE b.cname='英语')b
+ON c.sid=b.sid
+
+– 7.查询学过“张三”老师所教的所有课的同学的学号、姓名；
+SELECT a.sid,a.sname FROM student a,
+(SELECT a.sid FROM sc a,course b,Teacher c WHERE a.cid= b.cid AND a.cid=c.tid AND c.tname='张三') b
+WHERE a.sid=b.sid
+
+– 8.查询课程编号“01”的成绩比课程编号“02”课程低的所有同学的学号、姓名；
+SELECT a.sid,a.sname FROM
+(SELECT a.sid,a.cid,a.score,b.sname FROM sc a,student b WHERE cid='01' AND a.sid=b.sid)a LEFT JOIN
+(SELECT a.sid,a.cid,a.score,b.sname FROM sc a,student b WHERE cid='02' AND a.sid=b.sid)b
+ON a.sid=b.sid WHERE a.score<b.score
+
+– 9.查询所有课程成绩小于60分的同学的学号、姓名；
+SELECT DISTINCT a.sid,a.sname FROM student a ,sc b WHERE a.sid=b.sid AND b.score<60
+
+– 10.查询没有学全所有课的同学的学号、姓名；
+SELECT a.sid,a.sname FROM student a ,
+(SELECT sid,COUNT(cid) FROM sc GROUP BY sid HAVING COUNT(cid)< (SELECT COUNT(1) FROM course))b
+WHERE a.sid=b.sid
+
+– 11.查询至少有一门课与学号为“01”的同学所学相同的同学的学号和姓名；
+– 先查询到01同学学了哪些课程
+SELECT DISTINCT b.sid,a.sname FROM student a LEFT JOIN sc b
+ON a.sid=b.sid WHERE b.cid IN(
+SELECT cid FROM sc WHERE sid='01') AND b.sid!= '01'
+
+– 12.查询和"01"号的同学学习的课程完全相同的其他同学的学号和姓名
+– 先查询01号同学学习的课程信息
+SELECT SID, SNAME 
+FROM student 
+WHERE sid IN (
+    SELECT sid 
+    FROM sc 
+    WHERE sid != '01' 
+      AND cid IN (
+          SELECT cid 
+          FROM sc 
+          WHERE sid = '01'
+      )
+    GROUP BY sid
+    HAVING COUNT(*) = (
+        SELECT COUNT(*) 
+        FROM sc 
+        WHERE sid = '01'
+    )
+);
+
+
+– 13.把“SC”表中“张三”老师教的课的成绩都更改为此课程的平均成绩；
+– 查询张三老师教的课程
+你提供的 SQL 代码有以下几个问题和需要改进的地方：
+
+1. **问题：嵌套子查询引用的问题**  
+   在 `UPDATE` 中使用子查询 `SELECT avg_score FROM ...` 是合法的，但需要确保子查询的结果能正确映射到目标字段。在 MySQL 中，嵌套查询需要使用别名进行明确区分，否则可能会导致语法错误。
+
+2. **问题：`ROLLBACK` 和 `COMMIT` 的位置**  
+   在事务中，`ROLLBACK` 和 `COMMIT` 不能同时使用。如果你调用了 `ROLLBACK`，事务会结束，`COMMIT` 就不会生效。
+
+3. **改进建议**  
+   - 使用显式事务控制语句。
+   - 确保子查询只返回一个值（或与更新匹配的值）。
+   - 避免不必要的复杂嵌套查询，提高可读性和效率。
+
+---
+
+### **修正后的代码**
+```sql
+-- 开启事务
+BEGIN;
+
+-- 更新操作
+UPDATE sc 
+SET score = (
+    SELECT avg_score 
+    FROM (
+        SELECT AVG(score) AS avg_score 
+        FROM sc 
+        WHERE cid = (
+            SELECT cid 
+            FROM course a 
+            JOIN teacher b ON a.tid = b.tid 
+            WHERE b.tname = '张三'
+        )
+        GROUP BY cid
+    ) AS avg_result
+)
+WHERE cid = (
+    SELECT cid 
+    FROM course a 
+    JOIN teacher b ON a.tid = b.tid 
+    WHERE b.tname = '张三'
+);
+
+-- 根据需求选择提交或回滚
+-- 如果需要提交更改：
+COMMIT;
+
+-- 如果需要回滚更改：
+-- ROLLBACK;
+```
+
+---
+
+### **改进逻辑解析**
+1. **主查询：`UPDATE sc SET score = ...`**  
+   - 更新 `sc` 表中符合条件的记录，目标是将其 `score` 更新为计算得到的平均分。
+
+2. **子查询 1：更新的 `score` 值**  
+   ```sql
+   SELECT AVG(score) AS avg_score 
+   FROM sc 
+   WHERE cid = (
+       SELECT cid 
+       FROM course a 
+       JOIN teacher b ON a.tid = b.tid 
+       WHERE b.tname = '张三'
+   )
+   GROUP BY cid
+   ```
+   - 计算指定课程（`cid`）的平均分，并将结果赋值给 `score`。
+   - `GROUP BY cid` 确保计算以课程为单位。
+
+3. **子查询 2：课程的 `cid`**  
+   ```sql
+   SELECT cid 
+   FROM course a 
+   JOIN teacher b ON a.tid = b.tid 
+   WHERE b.tname = '张三'
+   ```
+   - 找到由教师 `张三` 授课的课程 `cid`。
+
+4. **事务控制**  
+   - **`BEGIN`**：开启事务。
+   - **`COMMIT`**：提交事务，保存更改。
+   - **`ROLLBACK`**：回滚事务，撤销更改。
+
+---
+
+### **注意事项**
+1. **`ROLLBACK` 和 `COMMIT` 的互斥性**  
+   在实际运行中，你需要根据逻辑决定使用 `ROLLBACK` 或 `COMMIT`，而不是同时使用。
+
+2. **子查询的结果唯一性**  
+   确保子查询 `SELECT cid ...` 和 `SELECT avg_score ...` 返回唯一值。如果可能返回多行，请使用 `LIMIT 1` 或调整逻辑。
+
+3. **测试环境验证**  
+   在生产环境中执行事务前，建议在测试环境中验证查询的正确性，避免误操作。
+
+4. **索引优化**  
+   如果 `sc`、`course`、`teacher` 表中数据量较大，确保 `cid` 和 `tid` 等字段上有索引以提升查询性能。
+
+---
+
+完成这些修改后，代码应该可以顺利运行并达到你的需求。
+
+
+
+
+– 14、查询没学过"张三"老师讲授的任一门课程的学生姓名
+– 查询到张三老师讲的课程
+SELECT sid,sname FROM student WHERE sid NOT IN(
+SELECT sid FROM sc WHERE cid IN(
+SELECT cid FROM course a,teacher b WHERE a.tid=b.tid AND b.tname='张三'))
+
+– 15、查询两门及其以上不及格课程的同学的学号，姓名及其平均成绩
+– 查询不及格课程的同学
+SELECT 
+    a.sid, 
+    a.sname, 
+    b.avg_score 
+FROM student a 
+JOIN (
+    SELECT 
+        sid, 
+        COUNT(*) AS num, 
+        AVG(score) AS avg_score 
+    FROM sc 
+    WHERE score < 60 
+    GROUP BY sid 
+    HAVING COUNT(*) >= 2
+) b 
+ON a.sid = b.sid;
+
+
+– 16、检索"01"课程分数小于60，按分数降序排列的学生信息
+SELECT * FROM student a INNER JOIN
+(SELECT sid,score FROM sc WHERE cid='01' AND score<60 ORDER BY score DESC)b
+ON a.sid =b.sid
+
+– 17、按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩
+– case when实现行列转换时会出现多条记录，如果不用聚合函数MAX() 直接进行group by分组，
+– 那么检索的是基表里分组字段的第一条记录，如果使用max()函数之后再进行group by分组，
+– 那么就会检索每个字段的最大值然后再分组
+SELECT a.sname,b.* FROM student a INNER JOIN (
+SELECT sid,
+MAX(CASE b.cid WHEN '01' THEN b.score ELSE 0 END) AS 语文,
+MAX(CASE b.cid WHEN '02' THEN b.score ELSE 0 END) AS 数学,
+MAX(CASE b.cid WHEN '03' THEN b.score ELSE 0 END) AS 英语,
+IFNULL(CAST(SUM(b.score)/3 AS DECIMAL(18,2)),0) 平均分 FROM sc b
+GROUP BY b.sid ORDER BY 平均分 DESC) b ON a.sid=b.sid
+
+– 18.查询各科成绩最高分、最低分和平均分：以如下形式显示：课程ID，课程name，最高分，最低分，平均分，及格率，中等率，优良率，优秀率
+SELECT a.cid,b.cname,MAX(a.score) 最高分,MIN(a.score) 最低分,CAST(AVG(a.score) AS DECIMAL(18,2)) 平均分,
+CAST(SUM(CASE WHEN a.score>=60 THEN 1 ELSE 0 END) /COUNT() AS DECIMAL(18,2)) 及格率,
+CAST(SUM(CASE WHEN a.score>=70 THEN 1 ELSE 0 END)/COUNT() AS DECIMAL(18,2)) 中等率,
+CAST(SUM(CASE WHEN a.score>=80 THEN 1 ELSE 0 END)/COUNT() AS DECIMAL(18,2)) 优良率,
+CAST(SUM(CASE WHEN a.score>=90 THEN 1 ELSE 0 END)/COUNT() AS DECIMAL(18,2)) 优秀率
+FROM sc a LEFT JOIN course b ON a.cid=b.cid GROUP BY cid
+
+– 19.按各科平均成绩从低到高和及格率的百分数从高到低顺序
+SELECT cid,AVG(score) 平均分,
+SUM(CASE WHEN score>=60 THEN 1 ELSE 0 END)/COUNT(*) 及格率
+FROM sc GROUP BY cid ORDER BY 平均分 ASC,及格率 DESC
+
+– 20、查询学生的总成绩并进行排名
+– s.s1score>t.s2score 每一次比较都是s表的所有记录,跟t表的每一行去对比
+– 方式一：
+SELECT a.sid,a.sname,b.总分,b.排名 FROM student
+a ,
+(
+SELECT t.sid,t.s2score 总分,
+(SELECT COUNT(s.s1score)+1 FROM (SELECT sid ,SUM(score) s1score FROM sc GROUP BY sid) s WHERE s.s1score>t.s2score) 排名
+FROM
+(SELECT sid ,SUM(score) s2score FROM sc GROUP BY sid) t ORDER BY s2score DESC
+)b
+WHERE a.sid=b.sid ORDER BY 排名;
+
+– 方式二：
+SELECT 
+    s.*, 
+    b.zf AS 总分, 
+    b.pm AS 排名
+FROM student s
+INNER JOIN (
+    SELECT 
+        a.sid, 
+        a.zf, 
+        COUNT(*) AS pm 
+    FROM (
+        SELECT 
+            sid, 
+            IFNULL(SUM(score), 0) AS zf 
+        FROM sc 
+        GROUP BY sid
+    ) a
+    JOIN (
+        SELECT 
+            sid, 
+            IFNULL(SUM(score), 0) AS zf 
+        FROM sc 
+        GROUP BY sid
+    ) b 
+    ON a.zf <= b.zf 
+    GROUP BY a.sid
+) b 
+ON s.sid = b.sid 
+ORDER BY b.pm;
+
+
+– 21、查询不同老师所教不同课程平均分从高到低显示
+SELECT 
+    c.tname, 
+    b.cname, 
+    AVG(a.score) AS 平均分
+FROM sc a
+INNER JOIN course b ON a.cid = b.cid
+INNER JOIN teacher c ON b.tid = c.tid
+GROUP BY c.tname, b.cname
+ORDER BY 平均分 DESC;
+
+
+– 22、查询所有课程的成绩第2名到第3名的学生信息及该课程成绩
+– 与排名的写法思想一致
+SELECT s.sid,s.sname,t.cid,t.score,t.排名 FROM student s
+INNER JOIN
+(SELECT sid,cid,score,(SELECT COUNT(DISTINCT score) FROM sc b WHERE a.cid=b.cid AND a.score>b.score ) 排名
+FROM sc a WHERE
+(SELECT COUNT(DISTINCT score) FROM sc b WHERE a.cid=b.cid AND a.score>b.score ) BETWEEN
+2 AND 3 ORDER BY cid) t ON s.sid=t.sid
+
+– 23、统计各科成绩各分数段人数：课程编号,课程名称,[100-85],[85-70],[70-60],[0-60]及所占百分比
+SELECT 
+    sc.cid, 
+    course.cname,
+    SUM(CASE WHEN score >= 85 THEN 1 ELSE 0 END) AS '[100-85]',
+    SUM(CASE WHEN score >= 85 THEN 1 ELSE 0 END) / COUNT(*) AS '[100-85]百分比',
+    SUM(CASE WHEN score >= 70 AND score < 85 THEN 1 ELSE 0 END) AS '[85-70]',
+    SUM(CASE WHEN score >= 70 AND score < 85 THEN 1 ELSE 0 END) / COUNT(*) AS '[85-70]百分比',
+    SUM(CASE WHEN score >= 60 AND score < 70 THEN 1 ELSE 0 END) AS '[70-60]',
+    SUM(CASE WHEN score >= 60 AND score < 70 THEN 1 ELSE 0 END) / COUNT(*) AS '[70-60]百分比',
+    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS '[0-60]',
+    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) / COUNT(*) AS '[0-60]百分比'
+FROM sc 
+INNER JOIN course ON sc.cid = course.cid 
+GROUP BY sc.cid, course.cname;
+
+
+– 24、查询学生平均成绩及其名次
+SELECT s.sid,s.sname,t.ag2 平均分,t.排名 FROM
+student s INNER JOIN
+(
+SELECT sid,ag2,
+(SELECT COUNT(*)+1 FROM (SELECT sid,AVG(score) ag1 FROM sc GROUP BY sid) a WHERE a.ag1>b.ag2 ) 排名
+FROM (SELECT sid,AVG(score) ag2 FROM sc GROUP BY sid) b
+) t
+ON s.sid=t.sid ORDER BY 排名
+
+– 25、查询各科成绩前三名的记录
+SELECT s.sname,c.cname,t.score,t.排名 FROM student s INNER JOIN
+(SELECT sid,cid,score,
+(SELECT COUNT(DISTINCT score)+1 FROM sc a WHERE a.score> b.score AND a.cid=b.cid ) 排名
+FROM sc b WHERE
+(SELECT COUNT(DISTINCT score)+1 FROM sc a
+WHERE a.score> b.score AND a.cid=b.cid) BETWEEN 1 AND 3
+ORDER BY cid ,排名
+)t ON s.sid=t.sid
+INNER JOIN course c
+ON t.cid=c.cid
+
+– 26.查询每门课程被选修的学生数
+SELECT 
+    course.cid, 
+    course.cname, 
+    COUNT(*) AS 学生数
+FROM sc
+INNER JOIN course ON sc.cid = course.cid
+GROUP BY course.cid, course.cname;
+
+
+– 27.查询出只选修了二门课程的全部学生的学号和姓名
+– 方式一：
+SELECT s.sid,s.sname FROM student s INNER JOIN
+(SELECT sid,COUNT(cid) FROM sc GROUP BY sid HAVING COUNT(cid)=2) t
+ON s.sid =t.sid
+– 方式二：
+SELECT 
+    s.sid, 
+    s.sname, 
+    COUNT(t.cid) AS 选课数 
+FROM student s 
+INNER JOIN sc t ON s.sid = t.sid 
+GROUP BY s.sid, s.sname 
+HAVING COUNT(t.cid) = 2;
+
+
+– 28、查询男生、女生人数
+SELECT COUNT(ssex='女')女生数,COUNT(ssex='男')男生数 FROM Student;
+
+– 29、查询名字中含有"风"字的学生信息
+SELECT * FROM student WHERE sname LIKE '%风%'
+
+– 30、查询同名同性学生名单，并统计同名人数
+SELECT sname,ssex FROM student GROUP BY sname,ssex HAVING COUNT(1)>1
+
+– 31、查询1990年出生的学生名单(注：Student表中Sage列的类型是datetime)
+SELECT * FROM student WHERE YEAR(sage)=1990
+
+– 32.查询每门课程的平均成绩，结果按平均成绩升序排列，平均成绩相同时，按课程号降序排列
+SELECT cid,AVG(score) FROM sc GROUP BY cid ORDER BY AVG(score),cid DESC
+
+– 33、查询平均成绩大于等于85的所有学生的学号、姓名和平均成绩
+SELECT 
+    a.sid, 
+    a.sname, 
+    CAST(AVG(b.score) AS DECIMAL(18,1)) AS 平均分
+FROM student a 
+INNER JOIN sc b ON a.sid = b.sid 
+GROUP BY a.sid, a.sname 
+HAVING AVG(b.score) >= 85;
+
+
+– 34、查询课程名称为"数学"，且分数低于60的学生姓名和分数
+SELECT a.sid,a.sname,b.cname,c.score FROM student a,course b,sc c
+WHERE a.sid=c.sid AND b.cid=c.cid AND c.score<60 AND b.cname='数学'
+
+– 35、查询所有学生的课程及分数情况；
+SELECT 
+    a.sname,
+    MAX(CASE WHEN b.cid = 01 THEN b.score ELSE 0 END) AS 语文,
+    MAX(CASE WHEN b.cid = 02 THEN b.score ELSE 0 END) AS 数学,
+    MAX(CASE WHEN b.cid = 03 THEN b.score ELSE 0 END) AS 英语
+FROM student a 
+LEFT JOIN sc b ON a.sid = b.sid 
+GROUP BY a.sid, a.sname;
+
+
+– 36、查询任何一门课程成绩在70分以上的姓名、课程名称和分数；
+SELECT * FROM (
+    SELECT 
+        a.sname,
+        MAX(CASE WHEN b.cid = 01 THEN b.score ELSE NULL END) AS 语文,
+        MAX(CASE WHEN b.cid = 02 THEN b.score ELSE NULL END) AS 数学,
+        MAX(CASE WHEN b.cid = 03 THEN b.score ELSE NULL END) AS 英语
+    FROM student a
+    INNER JOIN sc b ON a.sid = b.sid
+    INNER JOIN course c ON b.cid = c.cid
+    GROUP BY a.sid, a.sname
+) t 
+WHERE t.语文 > 70 AND t.数学 > 70 AND t.英语 > 70;
+
+
+– 37.查询不及格的课程，并按课程号从大到小排列
+SELECT cid,score FROM sc WHERE score<60 ORDER BY cid DESC
+
+– 38.查询课程编号为"01"且课程成绩在60分以上的学生的学号和姓名；
+SELECT s.sid,s.sname FROM student s INNER JOIN sc c ON s.sid=c.sid
+WHERE c.score>=60 AND c.cid='01'
+
+– 39、求每门课程的学生人数
+SELECT cid, COUNT(sid)学生数 FROM sc GROUP BY cid
+
+– 40.查询选修“张三”老师所授课程的学生中，成绩最高的学生姓名及其成绩
+SELECT a.sname, c.cname, d.tname, MAX(b.score) AS 分数
+FROM student a
+LEFT JOIN sc b ON a.sid = b.sid
+LEFT JOIN course c ON b.cid = c.cid
+LEFT JOIN teacher d ON c.tid = d.tid
+WHERE d.tname = '张三'
+GROUP BY a.sname, c.cname, d.tname;
+
+
+– 41、查询不同课程成绩相同的学生的学生编号、课程编号、学生成绩
+– 先查出sc表用,每个学生的成绩中,有相同分数的学生
+SELECT sid, cid, score
+FROM sc
+GROUP BY sid, cid, score
+HAVING COUNT(*) > 1;
+
+- 然后步骤：
+SELECT a.sid, a.cid, a.score
+FROM sc a
+JOIN (SELECT sid, cid, score 
+      FROM sc 
+      GROUP BY sid, cid, score 
+      HAVING COUNT(*) > 1) b 
+ON a.sid = b.sid AND a.cid = b.cid AND a.score = b.score;
+
+
+– 42、查询每门功成绩最好的前两名
+SELECT a.cid, a.sid, MAX(a.score) AS score, COUNT(DISTINCT b.score) AS 排名
+FROM sc a, sc b
+WHERE a.cid = b.cid AND a.score <= b.score
+GROUP BY a.sid, a.cid
+HAVING COUNT(DISTINCT b.score) > 1
+ORDER BY a.cid, COUNT(DISTINCT b.score);
+
+
+– 43、统计每门课程的学生选修人数（超过5人的课程才统计）。
+– 要求输出课程号和选修人数，查询结果按人数降序排列，若人数相同，按课程号升序排列
+SELECT cid,COUNT(sid)人数 FROM sc GROUP BY cid HAVING COUNT(sid)>5
+ORDER BY COUNT(sid) DESC,cid
+
+– 44、检索至少选修两门课程的学生学号
+SELECT sid,COUNT(cid)选课数 FROM sc GROUP BY sid HAVING COUNT(cid)>=2
+
+– 45、查询选修了全部课程的学生信息
+SELECT DISTINCT a.*
+FROM student a
+INNER JOIN sc b ON a.sid = b.sid
+WHERE (SELECT COUNT(1) FROM course) = (SELECT COUNT(1) FROM sc WHERE sid = a.sid);
+
+– 46、查询各学生的年龄
+SELECT *,YEAR(FROM_DAYS(DATEDIFF(NOW(),sage)))年龄 FROM student;
+
+– 47、查询本周过生日的学生
+SELECT * FROM student WHERE WEEK(SAGE)=WEEK(NOW())
+
+– 48、查询下周过生日的学生
+SELECT * FROM student WHERE WEEK(SAGE)=WEEK(NOW())+1
+
+– 49、查询本月过生日的学生
+SELECT * FROM STUDENT WHERE MONTH(SAGE)=MONTH(NOW())
+
+– 50、查询下月过生日的学生
+SELECT * FROM STUDENT WHERE MONTH(SAGE)=MONTH(NOW())+1
+
+
+51 设有商店和顾客两个实体，“商店”有属性：商店编号、商店名、地址、电话，“顾客”有属性：顾客编号、姓名、地址、年龄、性别。假设一个商店有多个顾客购物，一个顾客可以到多个商店购物，顾客每次去商店购物有一个消费金额和日期，而且规定每个顾客在每个商店里每天最多消费一次。
+
+①试画出ER图，并注明属性和联系类型。
+
+52假设每个学生选修若干门课程，且每个学生每选一门课只有一个成绩，每个教师只担任一门课的教学,一门课由若干教师任教。“学生”有属性：学号、姓名、地址、年龄、性别。“教师”有属性：职工号、教师姓名、职称，“课程”有属性：课程号、课程名。
+①试画出ER图，并注明属性和联系类型。
+②将E-R图转换成关系模型 ，并注明主码和外码
+
+关系模型
+
+学生（学号，姓名，地址，年龄，性别）
+
+课程（课程号，课程名）
+
+教师（职工号，职工姓名，职称）
+
+选课（学号，课程号，成绩）
+
+授课（职工号，课程号）
+
+主码和外码
+
+学生：学号（主码）；
+
+课程：课程号（主码）；
+
+教师：职工号（主码）；
+
+选课：（学号，课程号）（主码）；学号（外码），课程号（外码）；
+
+授课：（职工号，课程号）（主码）；职工号（外码），课程号（外码）。
+
+
+53
+现有学生报考系统，实体“考生”有属性：准考证号、姓名、年龄、性别，实体“课程”有属性：课程编号、名称、性质。一名考生可以报考多门课程，考生报考还有报考日期、成绩等信息。
+①试画出ER图，并注明属性和联系类型。
+②将E-R图转换成关系模型 ，并注明主码和外码
+
+关系模型
+
+考生（准考证号，姓名，年龄，性别）
+
+课程（课程编号，名称，性质）
+
+报考（准考证号，课程编号，报考日期，成绩）
+
+主码和外码
+
+考生：准考证号（主码）；
+
+课程：课程编号（主码）；
+
+
+54设有运动员和比赛项目两个实体，“运动员”有属性：运动员编号、姓名、单位、性别、年龄，“比赛项目”有属性：项目号、名称、最好成绩。一个运动员可以参加多个项目，一个项目由多名运动员参加，运动员参赛还包括比赛时间、比赛成绩等信息。
+①试画出ER图，并注明属性和联系类型。
+②将E-R图转换成关系模型 ，并注明主码和外码
+
+关系模型
+
+运动员（运动员编号，姓名，单位，性别，年龄）
+
+比赛项目（项目号，名称，最好成绩）
+
+参赛（运动员编号，项目号，比赛时间，比赛成绩）
+
+主码和外码
+
+运动员：运动员编号（主码）；
+
+比赛项目：项目号（主码）；
+
+参赛：（运动员编号，项目号）（主码）；运动员编号（外码），项目号（外码）。
