@@ -87,7 +87,31 @@ public partial class test : System.Web.UI.Page
             Label1.Text = ex.Message;
         }
     }
+/*
+protected void LinkButton_Click(object sender, EventArgs e)
+{
+    // 获取触发事件的 LinkButton
+    LinkButton linkButton = (LinkButton)sender;
 
+    // 获取 CommandArgument 中的 book_id
+    string bookId = linkButton.CommandArgument;
+
+    // 输出或使用 bookId
+    Response.Write("Book ID: " + bookId);
+
+    // 你可以根据 book_id 做其他逻辑处理，比如查询或跳转
+    // 示例：跳转到详细页面
+    // Response.Redirect($"BookDetails.aspx?book_id={bookId}");
+}
+protected void LinkButton_Click(object sender, CommandEventArgs e)
+{
+    // 从 e.CommandArgument 获取 book_id
+    string bookId = e.CommandArgument.ToString();
+
+    // 使用 bookId 进行相关操作
+    Response.Write("Book ID: " + bookId);
+}
+*/
     protected void Button1_Click(object sender, EventArgs e)
     {
 
