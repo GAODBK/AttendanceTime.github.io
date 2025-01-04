@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+    <title>压缩图片</title>
+    <style>
+      .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ebeef5;
+        border-radius: 8px;
+        background: #fff;
+      }
+      .upload-area {
+        border: 2px dashed #d9d9d9;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        border-radius: 6px;
+      }
+      .upload-area.dragover {
+        border-color: #409eff;
+        background: #f0f9ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="form-container">
+        <el-form
+          ref="form"
+          :model="form"
+          :rules="rules"
+          label-width="80px"
+          @submit.native.prevent="handleSubmit"
+        >
+          <!-- 标题 -->
+          <el-form-item label="高度：" prop="title">
+            <el-input v-model="form.title" placeholder="请输入图片需求的高度">
+            </el-input>
+          </el-form-item>
+
+          <!-- 正文 type="textarea" rows="5"-->
+          <el-form-item label="宽度：" prop="content">
+            <el-input v-model="form.content" placeholder="请输入图片需求的宽度">
+            </el-input>
+          </el-form-item>
+
+          <!-- 信息分类 -->
+          <el-form-item label="大小：" prop="category">
+            <el-input
+              v-model="form.category"
+              placeholder="请输入图片需求的大小"
+            >
+            </el-input>
+          </el-form-item>
+
+          <canvas id="canvas"></canvas>
+
+          <!-- 文件上传 -->
+          <el-form-item label="图片：">
+            <div
+              @drop.prevent="handleDrop"
+              @dragover.prevent="dragOver = true"
+              @dragleave.prevent="dragOver = false"
+              :class="{ dragover: dragOver }"
+              style="width: 100%"
+            >
+              <el-upload
+                v-if="!form.image"
+                action="#"
+                drag
+                :auto-upload="false"
+                :file-list="fileList"
+                @change="handleUpload"
+                :show-file-list="false"
+              >
+                拖拽图片到此区域或点击选择文件
+              </el-upload>
+
+              <p style="height: 160px; overflow: auto" v-else>
+                <img :src="form.image" style="max-width: 100%" />
+              </p>
+            </div>
+          </el-form-item>
+
+          <!-- 提交按钮 -->
+          <el-form-item>
+            <el-button type="primary" @click="handleSubmit"
+              >提交进行压缩</el-button
+            >
+            <el-button type="default" @click="resetForm">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+
+    <script>
+      const { createApp } = Vue;
+      const { ElForm, ElFormItem, ElInput, ElButton, ElUpload } = ElementPlus;
+
+      createApp({
+        components: { ElForm, ElFormItem, ElInput, ElButton, ElUpload },
+        data() {
+          return {
+            form: {
+              title: "",
+              content: "",
+              category: "",
+              image: null,
+            },
+            fileList: [],
+            dragOver: false,
+            rules: {
+              title: [
+                {
+                  required: true,
+                  message: "图片宽度为必填项",
+                  trigger: "blur",
+                },
+                {
+                  min: 2,
+                  max: 30,
+                  message: "请输入图片需求的高度",
+                  trigger: "blur",
+                },
+              ],
+              content: [
+                {
+                  required: true,
+                  message: "请输入图片需求的高度",
+                  trigger: "blur",
+                },
+              ],
+              category: [
+                { required: true, message: "图片大小", trigger: "blur" },
+                {
+                  min: 2,
+                  max: 15,
+                  message: "请输入图片需求的大小",
+                  trigger: "blur",
+                },
+              ],
+            },
+          };
+        },
+        methods: {
+          handleSubmit() {
+            if (!this.form.image) {
+              alert("请上传图片后再进行压缩！");
+              return;
+            }
+
+            const targetWidth = parseInt(this.form.content, 10); // 获取宽度
+            const targetHeight = parseInt(this.form.title, 10); // 获取高度
+            const maxSize = parseInt(this.form.category, 10) * 1024; // 获取大小限制 (KB -> Bytes)
+
+            if (!targetWidth || !targetHeight || !maxSize) {
+              alert("请填写正确的压缩参数（宽度、高度、大小）！");
+              return;
+            }
+
+            this.compressImage(
+              this.form.image,
+              targetWidth,
+              targetHeight,
+              maxSize
+            )
+              .then((compressedImage) => {
+                this.form.image = compressedImage; // 更新表单中的图片
+                alert("图片压缩成功！");
+              })
+              .catch((err) => {
+                console.error("图片压缩失败:", err);
+                alert("图片压缩失败，请检查输入的参数！");
+              });
+          },
+
+          compressImage(imageData, targetWidth, targetHeight, maxSize) {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.src = imageData;
+              img.onload = () => {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                // 设置目标宽高
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+
+                // 绘制压缩图像
+                ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                let quality = 0.9; // 初始质量
+                const compress = () => {
+                  canvas.toBlob(
+                    (blob) => {
+                      if (!blob) {
+                        reject(new Error("图片压缩失败"));
+                        return;
+                      }
+                      if (blob.size <= maxSize || quality <= 0.1) {
+                        resolve(URL.createObjectURL(blob)); // 返回压缩后的图片 URL
+                      } else {
+                        quality -= 0.1; // 递减质量
+                        compress();
+                      }
+                    },
+                    "image/jpeg",
+                    quality
+                  );
+                };
+                compress();
+              };
+              img.onerror = (err) => reject(err);
+            });
+          },
+
+          resetForm() {
+            this.$refs.form.resetFields(); // 重置表单字段
+            this.form.image = null; // 清空图片数据
+            this.fileList = []; // 清空文件列表
+            this.dragOver = false; // 重置拖拽状态
+
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空画布
+          },
+
+          handleUpload(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.form.image = e.target.result; // 读取图片数据
+            };
+            reader.readAsDataURL(file.raw);
+          },
+
+          handleDrop(event) {
+            const file = event.dataTransfer.files[0];
+            this.handleUpload({ raw: file });
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
