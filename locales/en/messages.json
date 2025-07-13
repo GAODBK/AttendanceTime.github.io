@@ -1,0 +1,230 @@
+{
+  "extensionName": {
+    "message": "codebox-一键复制代码，无需登录"
+  },
+  "extensionDescription": {
+    "message": "实现无需登录的一键复制代码；支持代码选择；允许未关注博主时查看完整提示内容；"
+  },
+  "popupDescription": {
+    "message": "基于github开源项目027xiguapi/code-box/修改，使用react框架，点击“Download Markdown”等按钮后，需要等待7秒启动"
+  },
+  "history": {
+    "message": "历史记录"
+  },
+  "sidePanel": {
+    "message": "侧边栏"
+  },
+  "more": {
+    "message": "更多设置"
+  },
+  "support": {
+    "message": "支持作者更新"
+  },
+  "privacy": {
+    "message": "Privacy policy"
+  },
+  "version": {
+    "message": "version"
+  },
+  "reset": {
+    "message": "reset"
+  },
+  "AppConfig": {
+    "message": "App Config"
+  },
+  "configCloseLog": {
+    "message": "Close Log"
+  },
+  "51ctoConfig": {
+    "message": "51CTO Config"
+  },
+  "51ctoCopyCode": {
+    "message": "Copy Code"
+  },
+  "51ctoCloseLoginModal": {
+    "message": "Close Login Modal"
+  },
+  "baiduConfig": {
+    "message": "51CTO Config"
+  },
+  "baiduCloseAIBox": {
+    "message": "Close AI Modal"
+  },
+  "cnblogsConfig": {
+    "message": "cnblogs Config"
+  },
+  "cnblogsCopyCode": {
+    "message": "Copy Code"
+  },
+  "csdnConfig": {
+    "message": "CSDN Config"
+  },
+  "csdnCloseAds": {
+    "message": "Close Ads"
+  },
+  "csdnCopyCode": {
+    "message": "Copy Code"
+  },
+  "csdnCloseFollow": {
+    "message": "Close Follow"
+  },
+  "csdnCloseVip": {
+    "message": "Close Vip"
+  },
+  "csdnAutoOpenCode": {
+    "message": "Auto Open Code"
+  },
+  "csdnCloseLoginModal": {
+    "message": "Close Login Modal"
+  },
+  "csdnCloseRedirectModal": {
+    "message": "Close Redirect App Modal"
+  },
+  "customConfig": {
+    "message": "Custom Config"
+  },
+  "customCssCode": {
+    "message": "Custom Css Code"
+  },
+  "jb51Config": {
+    "message": "Jb51 Config"
+  },
+  "jb51CloseAds": {
+    "message": "Close Ads"
+  },
+  "jb51CopyCode": {
+    "message": "Copy Code"
+  },
+  "jianshuConfig": {
+    "message": "Jianshu Config"
+  },
+  "jianshuCopyCode": {
+    "message": "Copy Code"
+  },
+  "jianshuCloseLoginModal": {
+    "message": "Close Login Modal"
+  },
+  "jianshuAutoOpenCode": {
+    "message": "Auto Open Code"
+  },
+  "phpConfig": {
+    "message": "Php Config"
+  },
+  "phpCopyCode": {
+    "message": "Copy Code"
+  },
+  "phpCloseLoginModal": {
+    "message": "Close Login Modal"
+  },
+  "zhihuConfig": {
+    "message": "Zhihu Config"
+  },
+  "mediumConfig": {
+    "message": "medium Config"
+  },
+  "zhihuCopyCode": {
+    "message": "Copy Code"
+  },
+  "zhihuCloseLoginModal": {
+    "message": "Close Login Modal"
+  },
+  "zhihuAutoOpenCode": {
+    "message": "Auto Open Code"
+  },
+  "getDescription": {
+    "message": "Get Description"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "download": {
+    "message": "Download"
+  },
+  "editMarkdown": {
+    "message": "Edit Markdown"
+  },
+  "downloadMarkdown": {
+    "message": "Download Markdown"
+  },
+  "parseMarkdown": {
+    "message": "Parse Markdown"
+  },
+  "downloadHtml": {
+    "message": "Download HTML"
+  },
+  "downloadPdf": {
+    "message": "Download PDF"
+  },
+  "downloadImg": {
+    "message": "Download Image"
+  },
+  "downloadAllImg": {
+    "message": "Download All Image"
+  },
+  "getArticle": {
+    "message": "Get All Article"
+  },
+  "downloading": {
+    "message": "Downloading"
+  },
+  "copyCode": {
+    "message": "Copy Code"
+  },
+  "parse": {
+    "message": "parse"
+  },
+  "copy": {
+    "message": "copy"
+  },
+  "copied": {
+    "message": "copied"
+  },
+  "showTag": {
+    "message": "Show Tag"
+  },
+  "allShowTag": {
+    "message": "All Tag"
+  },
+  "code": {
+    "message": "Code"
+  },
+  "juejinConfig": {
+    "message": "Juejin Config"
+  },
+  "oschinaConfig": {
+    "message": "Oschina Config"
+  },
+  "segmentfaultConfig": {
+    "message": "Segmentfault Config"
+  },
+  "weixinConfig": {
+    "message": "Wechat Config"
+  },
+  "paywallbusterConfig": {
+    "message": "Paywallbuster Config"
+  },
+  "360docConfig": {
+    "message": "360doc Config"
+  },
+  "pianshenConfig": {
+    "message": "PianShen Config"
+  },
+  "luoguConfig": {
+    "message": "LuoGu Config"
+  },
+  "fullPageScreenshot": {
+    "message": "Full Page Screenshot"
+  },
+  "getThumbMedia": {
+    "message": "get Thumb Media"
+  },
+  "getMediaResources": {
+    "message": "get Media Resources"
+  },
+  "copyURL": {
+    "message": "copy URL"
+  },
+  "makerQRPost": {
+    "message": "maker Post Image"
+  }
+}

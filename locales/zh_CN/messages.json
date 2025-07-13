@@ -1,0 +1,233 @@
+{
+  "extensionName": {
+    "message": "codebox-一键复制代码/下载文章"
+  },
+  "extensionDescription": {
+    "message": "实现一键下载文章成html或markdown文件;无需登录一键复制代码;支持选中代码;或者代码右上角按钮的一键复制;解除关注博主即可阅读全文提示;去除登录弹窗;去除跳转APP弹窗;页面自定义样式."
+  },
+  "popupDescription": {
+    "message": "免登录一键复制代码/下载文章"
+  },
+  "history": {
+    "message": "历史记录"
+  },
+  "sidePanel": {
+    "message": "侧边栏"
+  },
+  "more": {
+    "message": "更多设置"
+  },
+  "support": {
+    "message": "支持作者更新"
+  },
+  "privacy": {
+    "message": "隐私政策"
+  },
+  "version": {
+    "message": "版本"
+  },
+  "reset": {
+    "message": "重置"
+  },
+  "AppConfig": {
+    "message": "App设置"
+  },
+  "configCloseLog": {
+    "message": "关闭日志"
+  },
+  "51ctoConfig": {
+    "message": "51CTO设置"
+  },
+  "51ctoCopyCode": {
+    "message": "一键复制代码"
+  },
+  "51ctoCloseLoginModal": {
+    "message": "关闭登录弹窗"
+  },
+  "baiduConfig": {
+    "message": "百度设置"
+  },
+  "baiduCloseAIBox": {
+    "message": "关闭AI对话框"
+  },
+  "cnblogsConfig": {
+    "message": "博客园设置"
+  },
+  "cnblogsCopyCode": {
+    "message": "一键复制代码"
+  },
+  "csdnConfig": {
+    "message": "CSDN设置"
+  },
+  "csdnCloseAds": {
+    "message": "关闭广告"
+  },
+  "csdnCopyCode": {
+    "message": "一键复制代码"
+  },
+  "csdnCloseFollow": {
+    "message": "关注阅读全文"
+  },
+  "csdnCloseVip": {
+    "message": "VIP阅读全文"
+  },
+  "csdnAutoOpenCode": {
+    "message": "自动展开代码块"
+  },
+  "csdnCloseLoginModal": {
+    "message": "关闭登录弹窗"
+  },
+  "csdnCloseRedirectModal": {
+    "message": "关闭跳转APP弹窗"
+  },
+  "customConfig": {
+    "message": "自定义设置"
+  },
+  "customCssCode": {
+    "message": "页面插入css代码"
+  },
+  "jb51Config": {
+    "message": "脚本之家设置"
+  },
+  "jb51CloseAds": {
+    "message": "关闭广告"
+  },
+  "jb51CopyCode": {
+    "message": "一键复制代码"
+  },
+  "jianshuConfig": {
+    "message": "简书设置"
+  },
+  "jianshuCopyCode": {
+    "message": "一键复制代码"
+  },
+  "jianshuCloseLoginModal": {
+    "message": "关闭登录弹窗"
+  },
+  "jianshuAutoOpenCode": {
+    "message": "自动展开全文"
+  },
+  "phpConfig": {
+    "message": "php中文网设置"
+  },
+  "phpCopyCode": {
+    "message": "一键复制代码"
+  },
+  "phpCloseLoginModal": {
+    "message": "关闭登录弹窗"
+  },
+  "mediumConfig": {
+    "message": "medium设置"
+  },
+  "zhihuConfig": {
+    "message": "知乎设置"
+  },
+  "zhihuCopyCode": {
+    "message": "一键复制代码"
+  },
+  "zhihuCloseLoginModal": {
+    "message": "关闭登录弹窗"
+  },
+  "zhihuAutoOpenCode": {
+    "message": "自动展开全文"
+  },
+  "parse": {
+    "message": "解析"
+  },
+  "edit": {
+    "message": "编辑"
+  },
+  "download": {
+    "message": "下载"
+  },
+  "print": {
+    "message": "打印"
+  },
+  "getDescription": {
+    "message": "文章摘要"
+  },
+  "editMarkdown": {
+    "message": "编辑 Markdown"
+  },
+  "downloadMarkdown": {
+    "message": "下载 Markdown"
+  },
+  "parseMarkdown": {
+    "message": "解析 Markdown"
+  },
+  "downloadHtml": {
+    "message": "下载 HTML"
+  },
+  "downloadPdf": {
+    "message": "下载 PDF"
+  },
+  "downloadImg": {
+    "message": "下载图片"
+  },
+  "downloadAllImg": {
+    "message": "下载所有图片"
+  },
+  "getArticle": {
+    "message": "获取全文"
+  },
+  "downloading": {
+    "message": "正在下载"
+  },
+  "copyCode": {
+    "message": "一键复制代码"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "copied": {
+    "message": "复制成功"
+  },
+  "showTag": {
+    "message": "显示标签"
+  },
+  "allShowTag": {
+    "message": "所有标签"
+  },
+  "code": {
+    "message": "代码"
+  },
+  "juejinConfig": {
+    "message": "掘金设置"
+  },
+  "oschinaConfig": {
+    "message": "oschina设置"
+  },
+  "segmentfaultConfig": {
+    "message": "思否设置"
+  },
+  "weixinConfig": {
+    "message": "微信设置"
+  },
+  "paywallbusterConfig": {
+    "message": "paywallbuster设置"
+  },
+  "360docConfig": {
+    "message": "360doc设置"
+  },
+  "pianshenConfig": {
+    "message": "pianshen设置"
+  },
+  "luoguConfig": {
+    "message": "洛谷设置"
+  },
+  "fullPageScreenshot": {
+    "message": "全页面截图"
+  },
+  "getThumbMedia": {
+    "message": "获取封面"
+  },
+  "getMediaResources": {
+    "message": "复制资源"
+  },
+  "copyURL": {
+    "message": "复制URL"
+  },
+  "makerQRPost": {
+    "message": "生成海报"
+  }
+}

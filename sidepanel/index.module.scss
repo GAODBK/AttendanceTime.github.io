@@ -1,0 +1,53 @@
+.sidepanel {
+    margin: 0 auto;
+    padding: 10px 15px;
+    :global {
+        .wechat {
+            text-align: center;
+            .wechatDesc {
+                font-size: 14px;
+                color: red;
+            }
+            .wechatImg {
+                margin: 0 auto;
+                width: 150px;
+            }
+        }
+        .valid {
+            color: red;
+        }
+        .summary {
+            .title {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+            .content {
+                font-size: 14px;
+            }
+        }
+        .contentTitle {
+            margin: 15px 0 10px 0;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .item.download {
+            cursor: pointer;
+        }
+        .item.code {
+            cursor: pointer;
+            height: 20px;
+        }
+        .item.code .codeTxt {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: auto;
+            flex: 1;
+        }
+    }
+}
